@@ -18,9 +18,10 @@ func main() {
 	fmt.Println(array, mapObj)
 	// [1 2 3] map[a:1 b:2]
 
+	array = append(array, 4)
 	mapObj["c"] = 3
-	fmt.Println(mapObj)
-	// map[b:2 c:3 a:1]
+	fmt.Println(array, len(array), mapObj, len(mapObj))
+	// [1 2 3 4] 4 map[a:1 b:2 c:3] 3
 
 	a, b := demo(42)
 	fmt.Println("demo(42):", a, b)
