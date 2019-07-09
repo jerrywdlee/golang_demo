@@ -3,10 +3,8 @@ package main
 // Main Pkg
 import (
 	"bufio"
-	"bytes"
 	"compress/gzip"
 	"fmt"
-	"io"
 	"log"
 	"math/rand"
 	"os"
@@ -23,12 +21,8 @@ type GzipWriteStream struct {
 }
 
 // NewGzipWriteStream Init GzipWriteStream
-func NewGzipWriteStream() *GzipWriteStream {
-	return new(GzipWriteStream)
-}
-
-// CreateFile Create Gzip File
-func (f *GzipWriteStream) CreateFile(s string) {
+func NewGzipWriteStream(s string) *GzipWriteStream {
+	f := new(GzipWriteStream)
 	fi, err := os.OpenFile(s, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0660)
 	if err != nil {
 		log.Printf("Error in Create\n")
@@ -37,6 +31,7 @@ func (f *GzipWriteStream) CreateFile(s string) {
 	f.f = fi
 	f.gf = gzip.NewWriter(fi)
 	f.fw = bufio.NewWriter(f.gf)
+	return f
 }
 
 // WriteGZ Write into stream
@@ -66,22 +61,7 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 	fmt.Fprintln(file, rand.Int31())
 
-	gzf := NewGzipWriteStream()
-	gzf.CreateFile("data/Append.gz")
+	gzf := NewGzipWriteStream("data/Append.gz")
 	gzf.WriteGZ("AAAAAAA\n")
 	defer gzf.CloseGZ()
-}
-
-func compress(r io.Reader) (*bytes.Buffer, error) {
-	buf := new(bytes.Buffer)
-	zw, err := gzip.NewWriterLevel(buf, gzip.BestCompression)
-	if err != nil {
-		return buf, err
-	}
-	defer zw.Close()
-
-	if _, err := io.Copy(zw, r); err != nil {
-		return buf, err
-	}
-	return buf, nil
 }
