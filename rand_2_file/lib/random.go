@@ -43,6 +43,7 @@ func expPdf(x, lambda float64) float64 {
 }
 
 // Normal distribution
+// TODO: try https://blog.csdn.net/BertDai/article/details/78231609
 func normPdf(x, mean, sigma float64) float64 {
 	num1 := (1 / (math.Sqrt(2*math.Pi) * sigma))
 	num2 := (math.Exp(-math.Pow(x-mean, 2) / (2 * math.Pow(sigma, 2))))
